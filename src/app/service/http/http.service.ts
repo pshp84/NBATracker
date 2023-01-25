@@ -4,6 +4,8 @@ import { Observable, throwError } from 'rxjs';
 import { map, tap, finalize } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { getTeams } from 'src/app/models/getTeams';
+import { getGames } from 'src/app/models/getGames';
 
 @Injectable({
   providedIn: 'root'
@@ -15,21 +17,22 @@ export class HttpService {
     private httpClient: HttpClient
   ) { }
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    let ok: any;
+  intercept(request: HttpRequest<{}>, next: HttpHandler): Observable<HttpEvent<{}>> {
+    let status : string;
+    let httpError: HttpErrorResponse;
     request = request.clone({
       headers: request.headers.append('X-RapidAPI-Key', environment.XRapidAPIKey).append('X-RapidAPI-Host', environment.XRapidAPIHost)
     });
     return next.handle(request).pipe(
       tap(  // Succeeds when there is a response; ignore other events
-        event => ok = event instanceof HttpResponse ? 'succeeded' : '',
+        event => status = event instanceof HttpResponse ? 'succeeded' : 'failed',
         // Operation failed; error is an HttpErrorResponse
-        error => ok = error
+        error => httpError = error
       ),
       // log when response observable either completes or errors
       finalize(() => {
-        if (ok != "succeeded") {
-          this.handleError(ok);
+        if (status != "succeeded") {
+          this.handleError(httpError);
         }
       })
     );
@@ -56,27 +59,18 @@ export class HttpService {
     return throwError(() => new Error(errorMessage));
   }
 
-  getTeams(): Observable<any> {
+  getTeams(): Observable<getTeams> {
     let API_URL = `${this.endPoint}/teams`;
-    return this.httpClient.get(API_URL).pipe(
+    return this.httpClient.get<getTeams>(API_URL).pipe(
       map(res => {
         return res
       }),
     )
   }
 
-  getGames(query: string): Observable<any> {
+  getGames(query: string): Observable<getGames> {
     let API_URL = `${this.endPoint}/games?${query}`;
-    return this.httpClient.get(API_URL).pipe(
-      map(res => {
-        return res
-      }),
-    )
-  }
-
-  getSpecificTeam(teamId: number): Observable<any> {
-    let API_URL = `${this.endPoint}/teams/${teamId}`;
-    return this.httpClient.get(API_URL).pipe(
+    return this.httpClient.get<getGames>(API_URL).pipe(
       map(res => {
         return res
       }),

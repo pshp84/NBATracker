@@ -59,21 +59,33 @@ export class AllTeamsComponent {
 
   getGames(teamId: number) {
 
-    let query: string = this.getQueryParams({
+    let obj = Object.entries({
       pages: 0,
       per_page: 12,
       'team_ids[]': teamId
     });
 
+    let query = '';
+
+    for (let i = 0; i < obj.length; i++) {
+      if (i == 0) {
+        query = query.concat(`${obj[i][0]}=${obj[i][1]}`)
+      } else {
+        query = query.concat(`&${obj[i][0]}=${obj[i][1]}`)
+      }
+    }
+  
     for (let i = 0; i < this.allDates.length; i++) {
       query = query.concat(`&dates[]=${this.allDates[i]}`);
     }
 
     this.service.getGames(query).subscribe(res => {
-      let team: any = this.teams.find(team => team.id == teamId);
-      team.games = res.data;
+      let team = this.teams.find(team => team.id == teamId);
 
-      this.calculateAverageAndWins(team);
+      if (team) {
+        team.games = res.data;
+        this.calculateAverageAndWins(team);
+      }
     })
   }
 
@@ -94,17 +106,10 @@ export class AllTeamsComponent {
 
     team.average_points_scored = Math.round(winTotal / team.games.length);
     team.average_points_concended = Math.round(loseTotal / team.games.length);
-    
+
     this.displayedTeams.push(team);
     this.setSession();
     this.submitted = false;
-  }
-
-  getQueryParams(obj: any): string {
-    const searchParams = new URLSearchParams();
-    const params = obj;
-    Object.keys(params).forEach(key => searchParams.append(key, params[key]));
-    return searchParams.toString();
   }
 
   removeDisplayedTeam(displayedTeamIndex: number) {
