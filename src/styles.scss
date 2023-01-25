@@ -1,0 +1,48 @@
+/* You can add global styles to this file, and also import other style files */
+section {
+    padding: 60px 0;
+}
+
+p {
+    margin-bottom: 4px;
+}
+
+.pageTitle {
+    font-weight: 600;
+}
+
+.teamCard {
+    padding: 20px;
+    border: 1px solid #cfcfcf;
+}
+
+.allTeamsWrap {
+    margin-top: 32px;
+}
+
+.closeCard {
+    cursor: pointer;
+}
+
+.teamLogo img {
+    max-height: 108px;
+}
+
+.scoreHighlights span {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    color: #fff;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 4px;
+}
+
+.scoreHighlights span.red {
+    background-color: rgb(201, 12, 12);
+}
+
+.scoreHighlights span.green {
+    background-color: rgb(4, 94, 4);
+}

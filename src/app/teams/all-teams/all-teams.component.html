@@ -1,0 +1,62 @@
+<section class="allTeamList">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h2 class="pageTitle">NBA Score Tracking App</h2>
+                <form>
+                    <div class="row mt-4">
+                        <div class="col-sm-6">
+                            <select class="form-select d-inline" id="teamInput" [(ngModel)]="selectedTeam"
+                                [ngModelOptions]="{standalone: true}">
+                                <option *ngFor="let team of teams" [value]="team.id">
+                                    {{ team.full_name }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-primary" id="trackBtn"
+                                (click)="getSpecificTeam()">Track team</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="allTeamsWrap" *ngIf="displayedTeams.length > 0">
+                    <div class="row">
+                        <div class="col-md-5 mt-3" *ngFor="let displayedTeam of displayedTeams; index as i">
+                            <div class="teamCard">
+                                <div class="cardHead d-flex justify-content-between">
+                                    <div class="teamHeadings">
+                                        <h4>{{displayedTeam.full_name}} [{{displayedTeam.abbreviation}}]</h4>
+                                        <span>{{displayedTeam.conference}}</span>
+                                    </div>
+                                    <span class="closeCard" [id]="'remove' + displayedTeam.abbreviation" (click)="removeDisplayedTeam(i)">
+                                        x
+                                    </span>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-8">
+                                        <div class="teamResult">
+                                            <p>Result of past 12 days:</p>
+                                            <div class="scoreHighlights">
+                                                <span *ngFor="let game of displayedTeam.games" [ngClass]="game.winningTeam == displayedTeam.abbreviation ? 'green' : 'red'">{{game.winningTeam == displayedTeam.abbreviation ? 'W' : 'L'}}</span>
+                                            </div>
+                                            <p class="mt-1">Avg pts scored: <strong>{{displayedTeam.average_points_scored}}</strong></p>
+                                            <p class="mt-1">Avg pts conceded: <strong>{{displayedTeam.average_points_concended}}</strong></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="teamLogo">
+                                            <img [src]="'https://interstate21.com/nba-logos/' + displayedTeam.abbreviation + '.png'"
+                                                alt="" class="img-fluid">
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-success mt-3" [id]="'results' + displayedTeam.abbreviation" (click)="seeGameResult(displayedTeam.abbreviation)">See game results >></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

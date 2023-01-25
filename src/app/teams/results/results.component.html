@@ -1,0 +1,32 @@
+<section class="allTeamList">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-5" *ngIf="selectedTeam">
+                <div class="teamCard">
+                    <div class="cardHead">
+                        <div class="teamHeadings">
+                            <h4>{{selectedTeam.full_name}}</h4>
+                            <span>{{selectedTeam.conference}}</span>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="cardBody">
+                        <div class="teamResult">
+                            <p>Score of past 12 days:</p>
+                            <p *ngFor="let game of selectedTeam.games">
+                                <span class="scoreIndi"><strong>{{game.home_team.abbreviation}} </strong>{{game.home_team_score}}</span> -
+                                <span class="scoreIndi">{{game.visitor_team_score}}<strong> {{game.visitor_team.abbreviation}}</strong></span>
+                            </p>
+                            <p>
+                                <span class="scoreIndi"><strong>ORL </strong>102</span> -
+                                <span class="scoreIndi">102<strong> MIL</strong></span>
+                            </p>
+                        </div>
+                        <button class="btn btn-success mt-4 w-100" routerLink="/" id="backBtn">
+                            << Back to all team stats</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
